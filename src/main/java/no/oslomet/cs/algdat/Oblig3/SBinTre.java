@@ -118,7 +118,7 @@ public class SBinTre<T> {
         else if (cmp < 0) q.venstre = p;        // venstre barn til q
         else q.høyre = p;                       // høyre barn til q
 
-        antall ++;
+        antall ++;                              // antall øker
         return true;                            // vellykket innlegging
     }
 
@@ -146,6 +146,8 @@ public class SBinTre<T> {
 
       System.out.println(tre + " " + tre.omvendtString());
       // [1, 2, 6, 9, 10] [10, 9, 6, 2, 1]
+
+
     */
 
     public boolean fjern(T verdi) {
@@ -162,6 +164,28 @@ public class SBinTre<T> {
 
     //Oppgave 2:
     /*
+        public boolean inneholder(T verdi) {
+        if (verdi == null) return false;
+
+        Node<T> p = rot;
+
+        while (p != null) {
+            int cmp = comp.compare(verdi, p.verdi);
+            if (cmp < 0) p = p.venstre;
+            else if (cmp > 0) p = p.høyre;
+            else return true;
+        }
+
+        return false;
+    }
+
+    public boolean tom() {
+        return antall == 0;
+    }
+
+    public int antall() {
+        return antall;
+    }
     Metodene inneholder(), antall() og tom() er ferdig kodet. Den første avgjør om en verdi
     ligger i treet eller ikke. De to andre fungerer på vanlig måte. Lag kode for metoden public
     int antall(T verdi). Den skal returnere antall forekomster av verdi i treet. Det er tillatt
@@ -180,7 +204,22 @@ public class SBinTre<T> {
      */
 
     public int antall(T verdi) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+
+        Node<T> p = rot;
+
+        int teller = 0;
+
+        while (p != null) {
+            int cmp = comp.compare(verdi, p.verdi);
+            if (p.verdi == verdi){
+                teller ++;
+                p = p.høyre;
+            }
+            else if (cmp < 0) p = p.venstre;
+            else p = p.høyre;
+        }
+
+        return teller;
     }
 
     //Oppgave 3:
