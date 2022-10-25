@@ -236,44 +236,38 @@ public class SBinTre<T> {
      */
 
     private static <T> Node<T> førstePostorden(Node<T> p) {
-        while(p.venstre != null){
-            p = p.venstre;
-        }
-        while (p.venstre == null && p.høyre != null) {
-            p = p.høyre;
+        while (p.venstre != null || p.høyre != null) {
+            if (p.venstre == null) {
+                p = p.høyre;
+            }
+            else {
+                p = p.venstre;
+            }
         }
         return p;
-
     }
 
     private static <T> Node<T> nestePostorden(Node<T> p) {
 
-        if (p == p.forelder.venstre){
-            if (p.
-            }
-        }
-            /*
         if (p.forelder == null){
             return null;
         }
         else if (p.forelder.høyre == null || p == p.forelder.høyre){
             return p.forelder;
         }
-        else if (p.høyre != null){
-            p = p.høyre;
-        }
         else {
             p = p.forelder.høyre;
-        }
-            while(p.venstre != null){
-                p = p.venstre;
-            }
 
-            while (p.venstre == null && p.høyre != null){
-                p = p.høyre;
+            while (p.venstre != null || p.høyre != null) {
+                if (p.venstre == null) {
+                    p = p.høyre;
+                }
+                else {
+                    p = p.venstre;
+                }
             }
+        }
         return p;
-            */
     }
 
     //Oppgave 4:
