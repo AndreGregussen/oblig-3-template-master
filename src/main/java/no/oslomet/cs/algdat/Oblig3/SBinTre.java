@@ -84,7 +84,7 @@ public class SBinTre<T> {
         return antall == 0;
     }
 
-    //Oppgave 1:
+    //Oppgave 1: (FERDIG!)
     /*
     En Node i SBinTre har referanser til venstre barn, høyre barn, samt nodens forelder. Forelder
     må  få  riktig  verdi  ved  hver  innlegging,  men  forelder  skal  være  null  i  rotnoden.  Lag
@@ -162,30 +162,8 @@ public class SBinTre<T> {
         throw new UnsupportedOperationException("Ikke kodet ennå!");
     }
 
-    //Oppgave 2:
+    //Oppgave 2: (FERDIG!)
     /*
-        public boolean inneholder(T verdi) {
-        if (verdi == null) return false;
-
-        Node<T> p = rot;
-
-        while (p != null) {
-            int cmp = comp.compare(verdi, p.verdi);
-            if (cmp < 0) p = p.venstre;
-            else if (cmp > 0) p = p.høyre;
-            else return true;
-        }
-
-        return false;
-    }
-
-    public boolean tom() {
-        return antall == 0;
-    }
-
-    public int antall() {
-        return antall;
-    }
     Metodene inneholder(), antall() og tom() er ferdig kodet. Den første avgjør om en verdi
     ligger i treet eller ikke. De to andre fungerer på vanlig måte. Lag kode for metoden public
     int antall(T verdi). Den skal returnere antall forekomster av verdi i treet. Det er tillatt
@@ -205,24 +183,24 @@ public class SBinTre<T> {
 
     public int antall(T verdi) {
 
-        Node<T> p = rot;
+        Node<T> p = rot; // setter peker ved roten
 
-        int teller = 0;
+        int teller = 0; // teller
 
-        while (p != null) {
-            int cmp = comp.compare(verdi, p.verdi);
-            if (p.verdi == verdi){
-                teller ++;
-                p = p.høyre;
+        while (p != null) { // sjekker om treet er tom
+            int cmp = comp.compare(verdi, p.verdi); // sammenligner verdien vi leter etter med pekeren
+            if (p.verdi == verdi){ // hvis vi har funnet riktig verdi:
+                teller ++; // øker antallet av den verdien vi lette etter
+                p = p.høyre; // går til høyre
             }
-            else if (cmp < 0) p = p.venstre;
-            else p = p.høyre;
+            else if (cmp < 0) p = p.venstre; // hvis tallet vi sammenlignet med verdien er mindre enn verdien vil cmp være -1, da går vi til venstre
+            else p = p.høyre; // om verdien er større går vi til høyre
         }
 
-        return teller;
+        return teller; // returnerer antallet av verdien vi har funnet. Om treet var tomt returneres 0.
     }
 
-    //Oppgave 3:
+    //Oppgave 3: (FERDIG!)
     /*
     Lag hjelpemetodene private static <T> Node<T> førstePostorden(Node<T> p) og private
     private static <T> Node<T> nestePostorden(Node<T> p). Siden dette er private metode,
@@ -236,41 +214,40 @@ public class SBinTre<T> {
      */
 
     private static <T> Node<T> førstePostorden(Node<T> p) {
-        while (p.venstre != null || p.høyre != null) {
-            if (p.venstre == null) {
-                p = p.høyre;
+        while (p.venstre != null || p.høyre != null) { // sjekker om noden har barn
+            if (p.venstre == null) { // sjekker om det er et venstrebarn
+                p = p.høyre; // hvis ikke går vi til høyre
             }
             else {
-                p = p.venstre;
+                p = p.venstre; // er det et venstrebarn går vi til venstre
             }
         }
-        return p;
+        return p; // returnerer verdien vi har funnet
     }
 
     private static <T> Node<T> nestePostorden(Node<T> p) {
-
-        if (p.forelder == null){
+        if (p.forelder == null){ // sjekker om vi er ved roten i treet
             return null;
         }
-        else if (p.forelder.høyre == null || p == p.forelder.høyre){
-            return p.forelder;
+        else if (p.forelder.høyre == null || p == p.forelder.høyre){ // sjekker om noden har et høyre-søsken, eller om noden er høyre-barnet
+            return p.forelder; // hvis noden ikke har et høyre-søsken eller er høyre-søskenet, vil foreldren være neste i postorden
         }
         else {
-            p = p.forelder.høyre;
-
-            while (p.venstre != null || p.høyre != null) {
-                if (p.venstre == null) {
-                    p = p.høyre;
+            p = p.forelder.høyre; // hvis ikke går vi videre til høre side
+            // samme metode som i første postorden:
+            while (p.venstre != null || p.høyre != null) { // sjekker om noden har barn
+                if (p.venstre == null) { // sjekker om det er et venstrebarn
+                    p = p.høyre; // hvis ikke går vi til høyre
                 }
                 else {
-                    p = p.venstre;
+                    p = p.venstre; // er det et venstrebarn går vi til venstre
                 }
             }
         }
-        return p;
+        return p; // returnerer verdien vi har funnet
     }
 
-    //Oppgave 4:
+    //Oppgave 4: (FERDIG!)
     /*
     Lag hjelpemetodene public void postorden(Oppgave <? super T> oppgave) og private void
     postordenRecursive(Node<T>  p,  Oppgave<?  super  T>  oppgave)  som  brukes  til  å  utføre  en
@@ -283,7 +260,18 @@ public class SBinTre<T> {
      */
 
     public void postorden(Oppgave<? super T> oppgave) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+
+        if (tom()) return; // Hvis treet er tom returneres det
+        Node <T> p = rot; // setter en peker på rot-noden
+
+        Node <T> a = førstePostorden(p); // finner første postorden i treet
+
+        oppgave.utførOppgave(a.verdi); // sender videre verdien vi har funnet
+
+        while (a != p){ // while-løkke som stopper løkken om vi er ved roten
+            a = nestePostorden(a); // ender til neste i postorden
+            oppgave.utførOppgave(a.verdi); // sender videre verdien vi har funnet
+        }
     }
 
     public void postordenRecursive(Oppgave<? super T> oppgave) {
@@ -291,7 +279,14 @@ public class SBinTre<T> {
     }
 
     private void postordenRecursive(Node<T> p, Oppgave<? super T> oppgave) {
-        throw new UnsupportedOperationException("Ikke kodet ennå!");
+
+        if (p == null) return; //returnerer når vi kommer til roten
+
+        // kaller på egen metode for å sjekke verdi:
+        postordenRecursive(p.venstre, oppgave); // samme som i "førstePostorden()", ser om vi kan gå til venstre node
+        postordenRecursive(p.høyre, oppgave); // om venstre node er tom ser vi om vi kan gå til høyre node
+
+        oppgave.utførOppgave(p.verdi); // hvis begge barn-nodene er tomme har vi funnet den neste i postorden
     }
 
     //Oppgave 5:
